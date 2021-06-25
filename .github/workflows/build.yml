@@ -1,0 +1,32 @@
+name: Build Add-In
+ 
+on: [push]
+ 
+jobs:
+  build:
+ 
+    runs-on: windows-latest
+ 
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.0.2
+       
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5
+     
+    - name: Restore NuGet Packages
+      run: nuget restore src/FullMonty.sln
+ 
+    - name: Build and Publish Web App
+      run: msbuild src/FullMonty.sln /p:Configuration=Release
+ 
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: xl_addin
+        path: |
+          src/FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
+          src/FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll

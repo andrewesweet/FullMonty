@@ -29,3 +29,11 @@ jobs:
         path: |
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll
+
+  release-please:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: GoogleCloudPlatform/release-please-action@v2
+        with:
+          release-type: simple

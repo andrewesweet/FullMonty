@@ -136,20 +136,20 @@ namespace FullMonty.AddIn
         [ExcelFunction(
             "Creates a discrete uniform distribution with the given minimum and maximum values. If these values are not integers, the floor and ceiling respectively are taken."
         )]
-        public static string CreateUniformDistribution(
+        public static string CreateDiscreteUniformDistribution(
             [ExcelArgument("The smallest possible value of the distribution")]
             double min,
             [ExcelArgument("The largest possible value of the distribution")]
             double max
         )
         {
-            return Wrap(() => CreateNamedUniformDistribution(CreateName(), min, max));
+            return Wrap(() => CreateNamedDiscreteUniformDistribution(CreateName(), min, max));
         }
 
         [ExcelFunction(
             "Creates a named discrete uniform distribution with the given minimum and maximum values. If these values are not integers, the floor and ceiling respectively are taken."
         )]
-        public static string CreateNamedUniformDistribution(
+        public static string CreateNamedDiscreteUniformDistribution(
             [ExcelArgument("The handle name for the distribution")]
             string name,
             [ExcelArgument("The smallest possible value of the distribution")]
@@ -158,7 +158,7 @@ namespace FullMonty.AddIn
             double max
         )
         {
-            return Wrap(() => HandleManager.Register(UniformDistribution.FromContinuousBounds(min, max), name).Name);
+            return Wrap(() => HandleManager.Register(DiscreteUniformDistribution.FromContinuousBounds(min, max), name).Name);
         }
 
         [ExcelFunction("Takes a sample from a distribution", IsVolatile = true)]

@@ -3,12 +3,12 @@ using FullMonty.AddIn.Util;
 
 namespace FullMonty.AddIn.Distributions
 {
-    public class UniformDistribution : IDistribution
+    public class DiscreteUniformDistribution : IDistribution
     {
         private readonly int maxExclusive;
         private readonly Random random = RandomFactory.CreateInstance();
 
-        private UniformDistribution(int min, int max)
+        private DiscreteUniformDistribution(int min, int max)
         {
             if (min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be less than or equal to max");
 
@@ -33,17 +33,12 @@ namespace FullMonty.AddIn.Distributions
 
         public double Median => (Min + Max) / 2.0;
 
-        public static UniformDistribution FromDiscreteBounds(int min, int max)
+        public static DiscreteUniformDistribution FromContinuousBounds(double min, double max)
         {
-            return new UniformDistribution(min, max);
+            return new DiscreteUniformDistribution((int)Math.Floor(min), (int)Math.Ceiling(max));
         }
 
-        public static UniformDistribution FromContinuousBounds(double min, double max)
-        {
-            return new UniformDistribution((int)Math.Floor(min), (int)Math.Ceiling(max));
-        }
-
-        protected bool Equals(UniformDistribution other)
+        protected bool Equals(DiscreteUniformDistribution other)
         {
             return Min == other.Min && Max == other.Max;
         }
@@ -53,7 +48,7 @@ namespace FullMonty.AddIn.Distributions
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((UniformDistribution) obj);
+            return Equals((DiscreteUniformDistribution) obj);
         }
 
         public override int GetHashCode()

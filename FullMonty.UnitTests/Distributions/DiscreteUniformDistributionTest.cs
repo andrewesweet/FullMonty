@@ -5,12 +5,12 @@ using NUnit.Framework;
 
 namespace FullMonty.UnitTests.Distributions
 {
-    public class UniformDistributionTest
+    public class DiscreteUniformDistributionTest
     {
         [Test]
         public void ShouldBeSound()
         {
-            var uniform = UniformDistribution.FromContinuousBounds(1.1, 4.9);
+            var uniform = DiscreteUniformDistribution.FromContinuousBounds(1.1, 4.9);
             Assert.AreEqual(1, uniform.Min);
             Assert.AreEqual(5, uniform.Max);
 

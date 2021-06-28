@@ -62,7 +62,7 @@
     <Compile Include="Distributions\BetaDistributionTest.cs" />
     <Compile Include="Distributions\NormalDistributionTest.cs" />
     <Compile Include="Distributions\SampleDistribution.cs" />
-    <Compile Include="Distributions\UniformDistributionTest.cs" />
+    <Compile Include="Distributions\DiscreteUniformDistributionTest.cs" />
     <Compile Include="FunctionsTest.cs" />
     <Compile Include="HandleManagerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -73,23 +73,23 @@ namespace FullMonty.UnitTests
         }
 
         [Test]
-        public void ShouldCreateUniformDistribution()
+        public void ShouldCreateDiscreteUniformDistribution()
         {
             const double min = 1.0;
             const double max = 3.0;
-            var handle = Functions.CreateUniformDistribution(min, max);
+            var handle = Functions.CreateDiscreteUniformDistribution(min, max);
             AssertIsValidHandle(handle);
-            AssertIsExpectedUniformDistribution(handle, min, max);
+            AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
 
         [Test]
-        public void ShouldCreateNamedUniformDistribution()
+        public void ShouldCreateNamedDiscreteUniformDistribution()
         {
             const double min = 1.0;
             const double max = 3.0;
-            var handle = Functions.CreateNamedUniformDistribution(Name, min, max);
+            var handle = Functions.CreateNamedDiscreteUniformDistribution(Name, min, max);
             Assert.AreEqual(Name, handle);
-            AssertIsExpectedUniformDistribution(handle, min, max);
+            AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
 
         [Test]
@@ -157,10 +157,10 @@ namespace FullMonty.UnitTests
             Assert.AreEqual((lower + upper) / 2.0, distribution.Mean);
         }
 
-        private static void AssertIsExpectedUniformDistribution(string handle, double min, double max)
+        private static void AssertIsExpectedDiscreteUniformDistribution(string handle, double min, double max)
         {
             var distribution = Functions.HandleManager[handle]
-                .GetPayloadOrThrow<UniformDistribution>();
+                .GetPayloadOrThrow<DiscreteUniformDistribution>();
             Assert.AreEqual(min, distribution.Min);
             Assert.AreEqual(max, distribution.Max);
         }

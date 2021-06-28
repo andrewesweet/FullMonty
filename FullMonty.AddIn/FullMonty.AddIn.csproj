@@ -67,7 +67,7 @@
     <Compile Include="Distributions\BetaDistribution.cs" />
     <Compile Include="Distributions\NormalDistribution.cs" />
     <Compile Include="Distributions\SampleDistribution.cs" />
-    <Compile Include="Distributions\UniformDistribution.cs" />
+    <Compile Include="Distributions\DiscreteUniformDistribution.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="HandleManager.cs" />
     <Compile Include="IDistribution.cs" />

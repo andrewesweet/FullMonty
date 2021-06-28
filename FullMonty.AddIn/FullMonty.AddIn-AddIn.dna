@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DnaLibrary Name="FullMonty.AddIn Add-In" RuntimeVersion="v4.0" xmlns="http://schemas.excel-dna.net/addin/2018/05/dnalibrary">
   <ExternalLibrary Path="FullMonty.AddIn.dll" ExplicitExports="false" LoadFromBytes="true" Pack="true" IncludePdb="false" />
-  <Reference Path="MathNet.Numerics.dll" />
-  <Reference Path="System.Buffers.dll" />
-  <Reference Path="System.Memory.dll" />
-  <Reference Path="System.Numerics.Vector.dll" />
-  <Reference Path="System.Runtime.CompilerServices.Unsafe.dll" />
+  <Reference Path="MathNet.Numerics.dll" Pack="true" />
+  <Reference Path="System.Buffers.dll" Pack="true" />
+  <Reference Path="System.Memory.dll" Pack="true" />
+  <Reference Path="System.Numerics.Vector.dll" Pack="true" />
+  <Reference Path="System.Runtime.CompilerServices.Unsafe.dll" Pack="true" />
 
   <!--
        The RuntimeVersion attribute above allows two settings:

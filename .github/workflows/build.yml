@@ -30,7 +30,9 @@ jobs:
         name: ${{ env.ARTIFACT_NAME }}
         path: |
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
+          FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll.config
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll
+          FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll.config
 
   release_please:
     needs: build

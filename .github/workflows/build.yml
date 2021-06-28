@@ -24,7 +24,7 @@ jobs:
     - name: Run Tests
       run: packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe FullMonty.UnitTests/bin/Release/FullMonty.UnitTests.dll
 
-    - name: Upload Artifact
+    - name: Upload Add-In Artifact
       uses: actions/upload-artifact@v2
       with:
         name: ${{ env.ARTIFACT_NAME }}
@@ -33,6 +33,13 @@ jobs:
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll.config
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll.config
+
+    - name: Upload Add-In Debug Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.ARTIFACT_NAME }}_debug
+        path: FullMonty.AddIn/bin/Release/
+
 
   release_please:
     needs: build
@@ -47,6 +54,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
+
 
   release-assets:
     needs: release_please

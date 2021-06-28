@@ -1,5 +1,7 @@
 name: Build Add-In
 on: [push]
+env:
+  ARTIFACT_NAME: xl_addin
 jobs:
   build:
     runs-on: windows-latest
@@ -25,16 +27,43 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: xl_addin
+        name: ${{ env.ARTIFACT_NAME }}
         path: |
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
           FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll
 
-  release-please:
+  release_please:
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+        release_created: ${{ steps.release.outputs.release_created }}
+        upload_url:  ${{ steps.release.outputs.upload_url }}
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v2
+      - name: Create release
+        id: release
+        uses: GoogleCloudPlatform/release-please-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
+
+  release-assets:
+    needs: release_please
+    runs-on: ubuntu-latest
+    if: ${{ needs.release_please.outputs.release_created == 'true' }}
+    env:
+      ARTIFACT_DIR: "${{ github.workspace }}/artifacts"
+    steps:
+      - name: Create temporary directory
+        run: mkdir -p "${ARTIFACT_DIR}"
+
+      - name: Download the Add-In from the build job
+        uses: actions/download-artifact@v2
+        with:
+            name: ${{ env.ARTIFACT_NAME }}
+            path: ${{ env.ARTIFACT_DIR }}
+
+      - name: Upload the Add-In to the release
+        uses: shogo82148/actions-upload-release-asset@v1.3.0
+        with:
+          upload_url: ${{ needs.release_please.outputs.upload_url }}
+          asset_path: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME }}.zip

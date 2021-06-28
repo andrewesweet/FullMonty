@@ -53,6 +53,7 @@ namespace FullMonty.AddIn.Util.MathNetNumerics
 
             if (tau == 0d || data.Length == 1) return Minimum(data);
 
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (tau == 1d) return Maximum(data);
 
             var h = (data.Length - 1) * tau + 1d;

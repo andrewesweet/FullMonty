@@ -1,4 +1,5 @@
-﻿using FullMonty.AddIn;
+﻿using System.Collections.Generic;
+using FullMonty.AddIn;
 using FullMonty.AddIn.Distributions;
 using NUnit.Framework;
 
@@ -8,23 +9,25 @@ namespace FullMonty.UnitTests
     {
         private const string Name = "Dave";
 
-        [Test]
-        public void ShouldCreateSampledDistribution()
+        private static IEnumerable<TestCaseData> NullNameProvider()
         {
-            var samples = new object[] {1.0, 2.0};
-            var handle = Functions.CreateSampledDistribution(samples);
+            yield return new TestCaseData(null);
+            yield return new TestCaseData(string.Empty);
+            yield return new TestCaseData(" \t\r\n");
+        }
+
+        [Test, TestCaseSource(nameof(NullNameProvider))]
+        public void ShouldCreateSampledDistributionWhenNameNotSpecified(string name)
+        {
+            var handle = Functions.CreateSampledDistribution(name, new object[] {1.0, 2.0});
             AssertIsValidHandle(handle);
-            CollectionAssert.AreEquivalent(
-                samples,
-                Functions.HandleManager[handle]
-                    .GetPayloadOrThrow<SampleDistribution>().Samples);
         }
 
         [Test]
         public void ShouldCreateNamedSampledDistribution()
         {
             var samples = new object[] {1.0, 2.0};
-            var handle = Functions.CreateNamedSampledDistribution(Name, samples);
+            var handle = Functions.CreateSampledDistribution(Name, samples);
             Assert.AreEqual(Name, handle);
             CollectionAssert.AreEquivalent(
                 samples,
@@ -32,14 +35,11 @@ namespace FullMonty.UnitTests
                     .GetPayloadOrThrow<SampleDistribution>().Samples);
         }
 
-        [Test]
-        public void ShouldCreateBetaDistribution()
+        [Test, TestCaseSource(nameof(NullNameProvider))]
+        public void ShouldCreateBetaDistributionWhenNameNotSpecified(string name)
         {
-            const double min = 1.0;
-            const double max = 3.0;
-            var handle = Functions.CreateBetaDistribution(min, max, 2.0);
+            var handle = Functions.CreateBetaDistribution(name, 1.0, 3.0, 2.0);
             AssertIsValidHandle(handle);
-            AssertIsExpectedBetaDistribution(handle, min, max);
         }
 
         [Test]
@@ -47,19 +47,16 @@ namespace FullMonty.UnitTests
         {
             const double min = 1.0;
             const double max = 3.0;
-            var handle = Functions.CreateNamedBetaDistribution(Name, min, max, 2.0);
+            var handle = Functions.CreateBetaDistribution(Name, min, max, 2.0);
             Assert.AreEqual(Name, handle);
             AssertIsExpectedBetaDistribution(handle, min, max);
         }
 
-        [Test]
-        public void ShouldCreateNormalDistribution()
+        [Test, TestCaseSource(nameof(NullNameProvider))]
+        public void ShouldCreateNormalDistributionWhenNameNotSpecified(string name)
         {
-            const double lower = 1.0;
-            const double upper = 2.0;
-            var handle = Functions.CreateNormalDistribution(lower, upper);
+            var handle = Functions.CreateNormalDistribution(name, 1.0, 2.0);
             AssertIsValidHandle(handle);
-            AssertIsExpectedNormalDistribution(handle, lower, upper);
         }
 
         [Test]
@@ -67,19 +64,16 @@ namespace FullMonty.UnitTests
         {
             const double lower = 1.0;
             const double upper = 2.0;
-            var handle = Functions.CreateNamedNormalDistribution(Name, lower, upper);
+            var handle = Functions.CreateNormalDistribution(Name, lower, upper);
             Assert.AreEqual(Name, handle);
             AssertIsExpectedNormalDistribution(handle, lower, upper);
         }
 
-        [Test]
-        public void ShouldCreateDiscreteUniformDistribution()
+        [Test, TestCaseSource(nameof(NullNameProvider))]
+        public void ShouldCreateDiscreteUniformDistributionWhenNameNotSpecified(string name)
         {
-            const double min = 1.0;
-            const double max = 3.0;
-            var handle = Functions.CreateDiscreteUniformDistribution(min, max);
+            var handle = Functions.CreateDiscreteUniformDistribution(name, 1.0, 3.0);
             AssertIsValidHandle(handle);
-            AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
 
         [Test]
@@ -87,7 +81,7 @@ namespace FullMonty.UnitTests
         {
             const double min = 1.0;
             const double max = 3.0;
-            var handle = Functions.CreateNamedDiscreteUniformDistribution(Name, min, max);
+            var handle = Functions.CreateDiscreteUniformDistribution(Name, min, max);
             Assert.AreEqual(Name, handle);
             AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
@@ -95,7 +89,7 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldSample()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(new object[] {1.0});
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] {1.0});
             var sample = Functions.Sample(distributionHandle);
             Assert.AreEqual(1.0, sample);
         }
@@ -103,7 +97,7 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldTakeSamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(new object[] { 1.0, 2.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0, 2.0 });
             const double n = 42.0;
             var handle = Functions.TakeSamples(distributionHandle, n);
             AssertIsValidHandle(handle);
@@ -112,6 +106,7 @@ namespace FullMonty.UnitTests
 
             for (int i = 0; i < n; i++)
             {
+                // ReSharper disable twice CompareOfFloatsByEqualityOperator
                 Assert.That(samples[i] == 1.0 || samples[i] == 2.0, "Sampled value is not consistent with distribution");
             }
         }
@@ -119,7 +114,7 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldSumSamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(new object[] { 1.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0 });
             const double n = 42.0;
             var samplesHandle = Functions.TakeSamples(distributionHandle, n);
             var sum = Functions.SumSamples(samplesHandle);
@@ -129,7 +124,7 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldDisplaySamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(new object[] { 1.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0 });
             var samplesHandle = Functions.TakeSamples(distributionHandle, 5);
             var result = Functions.DisplayObj(samplesHandle);
             Assert.IsInstanceOf<double[]>(result);

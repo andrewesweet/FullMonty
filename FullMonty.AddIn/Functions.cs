@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using ExcelDna.Integration;
 using FullMonty.AddIn.Distributions;
 
@@ -52,44 +51,25 @@ namespace FullMonty.AddIn
         }
 
         [ExcelFunction("Creates a named distribution based on a list of samples")]
-        public static string CreateNamedSampledDistribution(
+        public static string CreateSampledDistribution(
             [ExcelArgument("The handle name for the distribution")]
             string name,
             [ExcelArgument("A list samples. Nulls and blanks will be ignored.", Name = "samples")]
             object[] samples
         )
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
+
             return Wrap(() => HandleManager.Register(new SampleDistribution(SanitiseSamples(samples)), name).Name);
-        }
-
-        [ExcelFunction("Creates a distribution based on a list of samples")]
-        public static string CreateSampledDistribution(
-            [ExcelArgument("A list samples. Nulls and blanks will be ignored.", Name = "samples")]
-            object[] samples
-        )
-        {
-            return Wrap(() => CreateNamedSampledDistribution(CreateName(), samples));
-        }
-
-        [ExcelFunction(
-            "Creates a beta distribution characterised by a floor value, a ceiling value and a modal value, as defined by Hubbard in How to Measure Anything: Finding the Value of Intangibles in Business, 3rd Edition."
-        )]
-        public static string CreateBetaDistribution(
-            [ExcelArgument("The smallest possible value of the distribution")]
-            double min,
-            [ExcelArgument("The largest possible value of the distribution")]
-            double max,
-            [ExcelArgument("The most likely value of the distribution")]
-            double mode
-        )
-        {
-            return Wrap(() => CreateNamedBetaDistribution(CreateName(), min, max, mode));
         }
 
         [ExcelFunction(
             "Creates a named beta distribution characterised by a floor value, a ceiling value and a modal value, as defined by Hubbard in How to Measure Anything: Finding the Value of Intangibles in Business, 3rd Edition."
         )]
-        public static string CreateNamedBetaDistribution(
+        public static string CreateBetaDistribution(
             [ExcelArgument("The handle name for the distribution")]
             string name,
             [ExcelArgument("The smallest possible value of the distribution")]
@@ -100,30 +80,29 @@ namespace FullMonty.AddIn
             double mode
         )
         {
-            return Wrap(() => HandleManager.Register(BetaDistribution.FromMode(min, max, mode), name).Name);
-        }
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
 
-        [ExcelFunction(
-            "Creates a normal distribution calibrated such that P(lower <= sample <= upper) is 90%, with P(sample < lower) and P(sample > upper) both being 5%."
-        )]
-        public static string CreateNormalDistribution(
-            [ExcelArgument("The lower bound")] double lower,
-            [ExcelArgument("The upper bound")] double upper
-        )
-        {
-            return Wrap(() => CreateNamedNormalDistribution(CreateName(), lower, upper));
+            return Wrap(() => HandleManager.Register(BetaDistribution.FromMode(min, max, mode), name).Name);
         }
 
         [ExcelFunction(
             "Creates a named normal distribution calibrated such that P(lower <= sample <= upper) is 90%, with P(sample < lower) and P(sample > upper) both being 5%."
         )]
-        public static string CreateNamedNormalDistribution(
+        public static string CreateNormalDistribution(
             [ExcelArgument("The handle name for the distribution")]
             string name,
             [ExcelArgument("The lower bound")] double lower,
             [ExcelArgument("The upper bound")] double upper
         )
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
+
             return Wrap(
                 () => HandleManager.Register(
                         NormalDistribution.FromNinetyPercentConfidenceIntervalBounds(lower, upper),
@@ -134,22 +113,9 @@ namespace FullMonty.AddIn
         }
 
         [ExcelFunction(
-            "Creates a discrete uniform distribution with the given minimum and maximum values. If these values are not integers, the floor and ceiling respectively are taken."
-        )]
-        public static string CreateDiscreteUniformDistribution(
-            [ExcelArgument("The smallest possible value of the distribution")]
-            double min,
-            [ExcelArgument("The largest possible value of the distribution")]
-            double max
-        )
-        {
-            return Wrap(() => CreateNamedDiscreteUniformDistribution(CreateName(), min, max));
-        }
-
-        [ExcelFunction(
             "Creates a named discrete uniform distribution with the given minimum and maximum values. If these values are not integers, the floor and ceiling respectively are taken."
         )]
-        public static string CreateNamedDiscreteUniformDistribution(
+        public static string CreateDiscreteUniformDistribution(
             [ExcelArgument("The handle name for the distribution")]
             string name,
             [ExcelArgument("The smallest possible value of the distribution")]
@@ -158,6 +124,11 @@ namespace FullMonty.AddIn
             double max
         )
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
+
             return Wrap(() => HandleManager.Register(DiscreteUniformDistribution.FromContinuousBounds(min, max), name).Name);
         }
 

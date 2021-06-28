@@ -27,6 +27,7 @@ namespace FullMonty.UnitTests
         {
             Assert.Throws<HandleManager.UnregisteredHandleException>(() =>
             {
+                // ReSharper disable once UnusedVariable
                 var x = new HandleManager()["myHandle"];
             });
         }

@@ -6,20 +6,26 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
+
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.0.2  
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1.0.5
+
     - name: Restore NuGet Packages
-      run: nuget restore src/FullMonty.sln
+      run: nuget restore FullMonty.sln
+
     - name: Build Sln
-      run: msbuild src/FullMonty.sln /p:Configuration=Release
+      run: msbuild FullMonty.sln /p:Configuration=Release
+
     - name: Run Tests
-      run: src/packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe src/FullMonty.UnitTests/bin/Release/FullMonty.UnitTests.dll
+      run: packages/NUnit.ConsoleRunner.3.12.0/tools/nunit3-console.exe FullMonty.UnitTests/bin/Release/FullMonty.UnitTests.dll
+
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
         name: xl_addin
         path: |
-          src/FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
-          src/FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll
+          FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn64-packed.xll
+          FullMonty.AddIn/bin/Release/FullMonty.AddIn-AddIn-packed.xll

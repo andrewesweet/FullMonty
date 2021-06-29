@@ -75,6 +75,7 @@ jobs:
 
       - name: Check the download
         run: |
+
           cd "${{ env.ARTIFACT_DIR }}/../"
           ls -a
 

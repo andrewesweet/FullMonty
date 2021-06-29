@@ -132,6 +132,26 @@ namespace FullMonty.AddIn
             return Wrap(() => HandleManager.Register(DiscreteUniformDistribution.FromContinuousBounds(min, max), name).Name);
         }
 
+        [ExcelFunction(
+            "Creates a named continuous uniform distribution with the given minimum and maximum values. If these values are not integers, the floor and ceiling respectively are taken."
+        )]
+        public static string CreateContinuousUniformDistribution(
+            [ExcelArgument("The handle name for the distribution")]
+            string name,
+            [ExcelArgument("The smallest possible value of the distribution")]
+            double min,
+            [ExcelArgument("The largest possible value of the distribution")]
+            double max
+        )
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
+
+            return Wrap(() => HandleManager.Register(new ContinuousUniformDistribution(min, max), name).Name);
+        }
+
         [ExcelFunction("Takes a sample from a distribution", IsVolatile = true)]
         public static object Sample(
             [ExcelArgument("The handle of the distribution to be sampled")]

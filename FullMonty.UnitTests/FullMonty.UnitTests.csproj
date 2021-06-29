@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Distributions\BetaDistributionTest.cs" />
+    <Compile Include="Distributions\ContinuousUniformDistributionTest.cs" />
     <Compile Include="Distributions\NormalDistributionTest.cs" />
     <Compile Include="Distributions\SampleDistribution.cs" />
     <Compile Include="Distributions\DiscreteUniformDistributionTest.cs" />

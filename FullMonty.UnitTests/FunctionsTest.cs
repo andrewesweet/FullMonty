@@ -86,6 +86,23 @@ namespace FullMonty.UnitTests
             AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
 
+        [Test, TestCaseSource(nameof(NullNameProvider))]
+        public void ShouldCreateContinuousUniformDistributionWhenNameNotSpecified(string name)
+        {
+            var handle = Functions.CreateContinuousUniformDistribution(name, 1.0, 3.0);
+            AssertIsValidHandle(handle);
+        }
+
+        [Test]
+        public void ShouldCreateNamedContinuousUniformDistribution()
+        {
+            const double min = 1.0;
+            const double max = 3.0;
+            var handle = Functions.CreateContinuousUniformDistribution(Name, min, max);
+            Assert.AreEqual(Name, handle);
+            AssertIsExpectedContinuousUniformDistribution(handle, min, max);
+        }
+
         [Test]
         public void ShouldSample()
         {
@@ -156,6 +173,14 @@ namespace FullMonty.UnitTests
         {
             var distribution = Functions.HandleManager[handle]
                 .GetPayloadOrThrow<DiscreteUniformDistribution>();
+            Assert.AreEqual(min, distribution.Min);
+            Assert.AreEqual(max, distribution.Max);
+        }
+
+        private static void AssertIsExpectedContinuousUniformDistribution(string handle, double min, double max)
+        {
+            var distribution = Functions.HandleManager[handle]
+                .GetPayloadOrThrow<ContinuousUniformDistribution>();
             Assert.AreEqual(min, distribution.Min);
             Assert.AreEqual(max, distribution.Max);
         }

@@ -66,6 +66,7 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
       ARTIFACT_DIR: "${{ github.workspace }}/FullMonty"
+      ASSET_NAME: FullMonty.${{ needs.release_please.outputs.major }}.${{ needs.release_please.outputs.minor }}.${{ needs.release_please.outputs.patch }}.zip
     steps:
       - name: Create temporary directory
         run: mkdir -p "${ARTIFACT_DIR}"
@@ -78,7 +79,7 @@ jobs:
 
       - name: Zip the Add-In
         run: |
-          zip -j -r "${{ env.ARTIFACT_DIR }}/FullMonty.${{ needs.release_please.outputs.major }}.${{ needs.release_please.outputs.minor }}.${{ needs.release_please.outputs.patch }}.zip" "${{ env.ARTIFACT_DIR }}"
+          zip -j -r "${{ env.ARTIFACT_DIR }}/${{ env.ASSET_NAME }}" "${{ env.ARTIFACT_DIR }}"
 
       - name: Upload the Add-In as a Release Asset
         uses: actions/upload-release-asset@v1
@@ -86,6 +87,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release_please.outputs.upload_url }}
-          asset_path: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME }}${{ env.ARTIFACT_EXTENSION }}
-          asset_name: ${{ env.ARTIFACT_NAME }}${{ env.ARTIFACT_EXTENSION }}
+          asset_path: ${{ env.ARTIFACT_DIR }}/${{ env.ASSET_NAME }}
+          asset_name: ${{ env.ASSET_NAME }}
           asset_content_type: application/zip

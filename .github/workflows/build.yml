@@ -78,7 +78,7 @@ jobs:
 
       - name: Zip the Add-In
         run: |
-          zip -j -r ""FullMonty.${{ needs.release_please.outputs.major }}.${{ needs.release_please.outputs.minor }}.${{ needs.release_please.outputs.patch }}.zip" "${{ env.ARTIFACT_DIR }}"
+          zip -j -r "FullMonty.${{ needs.release_please.outputs.major }}.${{ needs.release_please.outputs.minor }}.${{ needs.release_please.outputs.patch }}.zip" "${{ env.ARTIFACT_DIR }}"
 
       - name: Upload the Add-In as a Release Asset
         uses: actions/upload-release-asset@v1

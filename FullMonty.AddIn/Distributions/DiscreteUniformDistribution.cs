@@ -31,14 +31,12 @@ namespace FullMonty.AddIn.Distributions
             for (var i = 0; i < samples.Length; i++) samples[i] = Sample();
         }
 
-        public double Median => (Min + Max) / 2.0;
-
         public static DiscreteUniformDistribution FromContinuousBounds(double min, double max)
         {
             return new DiscreteUniformDistribution((int)Math.Floor(min), (int)Math.Ceiling(max));
         }
 
-        protected bool Equals(DiscreteUniformDistribution other)
+        private bool Equals(DiscreteUniformDistribution other)
         {
             return Min == other.Min && Max == other.Max;
         }

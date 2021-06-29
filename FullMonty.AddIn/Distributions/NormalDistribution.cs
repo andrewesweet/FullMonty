@@ -30,8 +30,6 @@ namespace FullMonty.AddIn.Distributions
             SamplesUnchecked(random, samples, Mean, StdDev);
         }
 
-        public double Median => Mean;
-
         internal static double SampleUnchecked(Random rnd, double mean, double stdDev)
         {
             double x;

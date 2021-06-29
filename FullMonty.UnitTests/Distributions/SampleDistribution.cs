@@ -18,9 +18,6 @@ namespace FullMonty.UnitTests.Distributions
 
             Assert.AreEqual(1.0, samples.Min());
             Assert.AreEqual(5.0, samples.Max());
-
-            Assert.AreEqual(3.0, samples.Median());
-            Assert.AreEqual(3.0, sampleDistribution.Median);
         }
     }
 }

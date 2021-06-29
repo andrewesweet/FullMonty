@@ -13,7 +13,7 @@ namespace FullMonty.AddIn.Distributions
         public SampleDistribution(IList<double> samples)
         {
             Samples = samples ?? throw new ArgumentNullException(nameof(samples), "can not be null");
-            Median = samples.Median();
+            samples.Median();
         }
 
         public IList<double> Samples { get; }
@@ -28,9 +28,7 @@ namespace FullMonty.AddIn.Distributions
             for (var i = 0; i < samples.Length; i++) samples[i] = Sample();
         }
 
-        public double Median { get; }
-
-        protected bool Equals(SampleDistribution other)
+        private bool Equals(SampleDistribution other)
         {
             return Samples.SequenceEqual(other.Samples);
         }

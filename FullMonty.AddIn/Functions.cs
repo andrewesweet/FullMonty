@@ -152,6 +152,21 @@ namespace FullMonty.AddIn
             return Wrap(() => HandleManager.Register(new ContinuousUniformDistribution(min, max), name).Name);
         }
 
+        [ExcelFunction("Create a distribution whose samples are a product of the samples taken from a list of distributions")]
+        public static string CreateProductDistribution(
+            [ExcelArgument("The handle name for the distribution")] 
+            string name, 
+            [ExcelArgument("The list of distribution")]
+            params string[] distributions)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = CreateName();
+            }
+
+            return Wrap(() => HandleManager.Register(new ProductDistribution(distributions.Select(x => HandleManager[x].GetPayloadOrThrow<IDistribution>()).ToList()), name).Name);
+        }
+
         [ExcelFunction("Takes a sample from a distribution", IsVolatile = true)]
         public static object Sample(
             [ExcelArgument("The handle of the distribution to be sampled")]

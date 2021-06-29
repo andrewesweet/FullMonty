@@ -29,8 +29,6 @@ namespace FullMonty.AddIn.Distributions
             for (var i = 0; i < samples.Length; i++) samples[i] = Sample();
         }
 
-        public double Median => (Min + Max) / 2.0;
-
         private bool Equals(ContinuousUniformDistribution other)
         {
             return Min.Equals(other.Min) && Max.Equals(other.Max);

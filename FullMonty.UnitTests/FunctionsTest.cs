@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using ExcelDna.Integration;
 using FullMonty.AddIn;
 using FullMonty.AddIn.Distributions;
 using NUnit.Framework;
@@ -16,7 +18,8 @@ namespace FullMonty.UnitTests
             yield return new TestCaseData(" \t\r\n");
         }
 
-        [Test, TestCaseSource(nameof(NullNameProvider))]
+        [Test]
+        [TestCaseSource(nameof(NullNameProvider))]
         public void ShouldCreateSampledDistributionWhenNameNotSpecified(string name)
         {
             var handle = Functions.CreateSampledDistribution(name, new object[] {1.0, 2.0});
@@ -35,7 +38,8 @@ namespace FullMonty.UnitTests
                     .GetPayloadOrThrow<SampleDistribution>().Samples);
         }
 
-        [Test, TestCaseSource(nameof(NullNameProvider))]
+        [Test]
+        [TestCaseSource(nameof(NullNameProvider))]
         public void ShouldCreateBetaDistributionWhenNameNotSpecified(string name)
         {
             var handle = Functions.CreateBetaDistribution(name, 1.0, 3.0, 2.0);
@@ -52,7 +56,8 @@ namespace FullMonty.UnitTests
             AssertIsExpectedBetaDistribution(handle, min, max);
         }
 
-        [Test, TestCaseSource(nameof(NullNameProvider))]
+        [Test]
+        [TestCaseSource(nameof(NullNameProvider))]
         public void ShouldCreateNormalDistributionWhenNameNotSpecified(string name)
         {
             var handle = Functions.CreateNormalDistribution(name, 1.0, 2.0);
@@ -69,7 +74,8 @@ namespace FullMonty.UnitTests
             AssertIsExpectedNormalDistribution(handle, lower, upper);
         }
 
-        [Test, TestCaseSource(nameof(NullNameProvider))]
+        [Test]
+        [TestCaseSource(nameof(NullNameProvider))]
         public void ShouldCreateDiscreteUniformDistributionWhenNameNotSpecified(string name)
         {
             var handle = Functions.CreateDiscreteUniformDistribution(name, 1.0, 3.0);
@@ -86,7 +92,8 @@ namespace FullMonty.UnitTests
             AssertIsExpectedDiscreteUniformDistribution(handle, min, max);
         }
 
-        [Test, TestCaseSource(nameof(NullNameProvider))]
+        [Test]
+        [TestCaseSource(nameof(NullNameProvider))]
         public void ShouldCreateContinuousUniformDistributionWhenNameNotSpecified(string name)
         {
             var handle = Functions.CreateContinuousUniformDistribution(name, 1.0, 3.0);
@@ -104,6 +111,33 @@ namespace FullMonty.UnitTests
         }
 
         [Test]
+        public void ShouldExportCreateProductDistributionAsExcelFunction()
+        {
+            var method = typeof(Functions).GetMethod(nameof(Functions.CreateProductDistribution));
+            Assert.IsNotNull(method, $"There is not method named {nameof(Functions.CreateProductDistribution)}");
+            Assert.IsTrue(
+                method.GetCustomAttributes(false).Any(x => x is ExcelFunctionAttribute),
+                $"{nameof(Functions.CreateProductDistribution)} is not marked with {nameof(ExcelFunctionAttribute)}");
+        }
+
+        [Test]
+        public void ShouldCreateProductDistribution()
+        {
+            var distributionOne = Functions.CreateContinuousUniformDistribution(null, 1.0, 1.0);
+            var distributionTwo = Functions.CreateContinuousUniformDistribution(null, 2.0, 2.0);
+            var distributionThree = Functions.CreateContinuousUniformDistribution(null, 3.0, 3.0);
+
+            var productDistribution =
+                Functions.CreateProductDistribution(null, distributionOne, distributionTwo, distributionThree);
+
+            Assert.IsInstanceOf<ProductDistribution>(Functions.HandleManager[productDistribution].Payload);
+            CollectionAssert.AreEquivalent(
+                new[] {distributionOne, distributionTwo, distributionThree}.Select(x =>
+                    Functions.HandleManager[x].Payload),
+                Functions.HandleManager[productDistribution].GetPayloadOrThrow<ProductDistribution>().Distributions);
+        }
+
+        [Test]
         public void ShouldSample()
         {
             var distributionHandle = Functions.CreateSampledDistribution(null, new object[] {1.0});
@@ -114,24 +148,23 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldTakeSamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0, 2.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] {1.0, 2.0});
             const double n = 42.0;
             var handle = Functions.TakeSamples(distributionHandle, n);
             AssertIsValidHandle(handle);
             var samples = Functions.HandleManager[handle].GetPayloadOrThrow<Samples>();
             Assert.AreEqual(n, samples.NumberOfSamples);
 
-            for (int i = 0; i < n; i++)
-            {
+            for (var i = 0; i < n; i++)
                 // ReSharper disable twice CompareOfFloatsByEqualityOperator
-                Assert.That(samples[i] == 1.0 || samples[i] == 2.0, "Sampled value is not consistent with distribution");
-            }
+                Assert.That(samples[i] == 1.0 || samples[i] == 2.0,
+                    "Sampled value is not consistent with distribution");
         }
 
         [Test]
         public void ShouldSumSamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] {1.0});
             const double n = 42.0;
             var samplesHandle = Functions.TakeSamples(distributionHandle, n);
             var sum = Functions.SumSamples(samplesHandle);
@@ -141,11 +174,11 @@ namespace FullMonty.UnitTests
         [Test]
         public void ShouldDisplaySamples()
         {
-            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] { 1.0 });
+            var distributionHandle = Functions.CreateSampledDistribution(null, new object[] {1.0});
             var samplesHandle = Functions.TakeSamples(distributionHandle, 5);
             var result = Functions.DisplayObj(samplesHandle);
             Assert.IsInstanceOf<double[]>(result);
-            CollectionAssert.AreEquivalent(new[] { 1.0, 1.0, 1.0, 1.0, 1.0 }, (double[])result);
+            CollectionAssert.AreEquivalent(new[] {1.0, 1.0, 1.0, 1.0, 1.0}, (double[]) result);
         }
 
         private static void AssertIsValidHandle(string handle)

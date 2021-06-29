@@ -25,8 +25,6 @@ namespace FullMonty.UnitTests.Distributions
 
             var maxSample = samples.Max();
             Assert.LessOrEqual(maxSample, max);
-
-            Assert.AreEqual(beta.Median, samples.Median(), 0.5);
         }
 
         [Test]
@@ -47,8 +45,6 @@ namespace FullMonty.UnitTests.Distributions
 
             var maxSample = samples.Max();
             Assert.LessOrEqual(maxSample, max);
-
-            Assert.AreEqual(beta.Median, samples.Median(), 0.5);
         }
     }
 }

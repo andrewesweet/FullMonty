@@ -45,8 +45,6 @@ namespace FullMonty.AddIn.Distributions
             for (var i = 0; i < samples.Length; i++) samples[i] = Sample();
         }
 
-        public double Median => median.Value;
-
         private static double GammaSampleUnchecked(Random rnd, double shape, double rate)
         {
             if (double.IsPositiveInfinity(rate)) return shape;

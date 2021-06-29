@@ -37,6 +37,9 @@
     <Reference Include="ExcelDna.Integration, Version=1.1.0.0, Culture=neutral, PublicKeyToken=f225e9659857edbe, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDna.Integration.1.1.0\lib\ExcelDna.Integration.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelDna.Registration, Version=1.1.0.0, Culture=neutral, PublicKeyToken=f225e9659857edbe, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelDna.Registration.1.1.0\lib\net40\ExcelDna.Registration.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics, Version=4.15.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.15.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
@@ -64,7 +67,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddIn.cs" />
     <Compile Include="Distributions\BetaDistribution.cs" />
+    <Compile Include="Distributions\ProductDistribution.cs" />
     <Compile Include="Distributions\ContinuousUniformDistribution.cs" />
     <Compile Include="Distributions\NormalDistribution.cs" />
     <Compile Include="Distributions\SampleDistribution.cs" />

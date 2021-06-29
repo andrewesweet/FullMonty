@@ -21,9 +21,6 @@ namespace FullMonty.UnitTests.Distributions
             Assert.That(samples.All(x => x >= 1.1), "Some samples were smaller than the expected minimum");
 
             Assert.That(samples.All(x => x <= 4.9), "Some samples were larger than the expected maximum");
-
-            Assert.AreEqual(3.0, uniform.Median);
-            Assert.AreEqual(3.0, samples.Median(), 0.1);
         }
     }
 }

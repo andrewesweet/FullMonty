@@ -48,6 +48,9 @@ jobs:
     outputs:
         release_created: ${{ steps.release.outputs.release_created }}
         upload_url:  ${{ steps.release.outputs.upload_url }}
+        major: ${{ steps.release.outputs.major }}
+        minor: ${{ steps.release.outputs.minor }}
+        patch: ${{ steps.release.outputs.patch }}
     steps:
       - name: Create release
         id: release
@@ -62,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
-      ARTIFACT_DIR: "${{ github.workspace }}/artifacts"
+      ARTIFACT_DIR: "${{ github.workspace }}/FullMonty"
     steps:
       - name: Create temporary directory
         run: mkdir -p "${ARTIFACT_DIR}"
@@ -73,14 +76,9 @@ jobs:
             name: ${{ env.ARTIFACT_NAME }}
             path: ${{ env.ARTIFACT_DIR }}
 
-      - name: Check the download
+      - name: Zip the Add-In
         run: |
-
-          cd "${{ env.ARTIFACT_DIR }}/../"
-          ls -a
-
-          cd "${{ env.ARTIFACT_DIR }}"
-          ls -a
+          zip -j -r ""FullMonty.${{ needs.release_please.outputs.major }}.${{ needs.release_please.outputs.minor }}.${{ needs.release_please.outputs.patch }}.zip" "${{ env.ARTIFACT_DIR }}"
 
       - name: Upload the Add-In as a Release Asset
         uses: actions/upload-release-asset@v1

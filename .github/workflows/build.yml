@@ -2,6 +2,7 @@ name: Build Add-In
 on: [push]
 env:
   ARTIFACT_NAME: xl_addin
+  ARTIFACT_EXTENSION: .zip
 jobs:
   build:
     runs-on: windows-latest
@@ -62,7 +63,6 @@ jobs:
     if: ${{ needs.release_please.outputs.release_created == 'true' }}
     env:
       ARTIFACT_DIR: "${{ github.workspace }}/artifacts"
-      ARTIFACT_NAME_WITH_EXTENSION: ${{ env.ARTIFACT_NAME }}.zip
     steps:
       - name: Create temporary directory
         run: mkdir -p "${ARTIFACT_DIR}"
@@ -79,6 +79,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.release_please.outputs.upload_url }}
-          asset_path: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME_WITH_EXTENSION }}
-          asset_name: ${{ env.ARTIFACT_NAME_WITH_EXTENSION }}
+          asset_path: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME }}${{ env.ARTIFACT_EXTENSION }}
+          asset_name: ${{ env.ARTIFACT_NAME }}${{ env.ARTIFACT_EXTENSION }}
           asset_content_type: application/zip

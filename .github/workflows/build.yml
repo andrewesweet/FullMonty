@@ -73,6 +73,14 @@ jobs:
             name: ${{ env.ARTIFACT_NAME }}
             path: ${{ env.ARTIFACT_DIR }}
 
+      - name: Check the download
+        run: |
+          cd "${{ env.ARTIFACT_DIR }}../"
+          ls -a
+
+          cd "${{ env.ARTIFACT_DIR }}"
+          ls -a
+
       - name: Upload the Add-In as a Release Asset
         uses: actions/upload-release-asset@v1
         env:

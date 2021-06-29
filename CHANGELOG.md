@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.0.6](https://www.github.com/andrewesweet/FullMonty/compare/v2.0.5...v2.0.6) (2021-06-29)
+
+
+### Bug Fixes
+
+* The Add-In is now uploaded as a release asset ([0409b73](https://www.github.com/andrewesweet/FullMonty/commit/0409b73949f52fb710f6ee54afc6c0b70275fde8))
+
 ### [2.0.5](https://www.github.com/andrewesweet/FullMonty/compare/v2.0.4...v2.0.5) (2021-06-29)
 
 

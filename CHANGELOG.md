@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://www.github.com/andrewesweet/FullMonty/compare/v2.0.7...v2.1.0) (2021-06-29)
+
+
+### Features
+
+* Added ProductDistribution; a distribution whose samples as the product of samples taken from a list of other distributions ([f6b97e4](https://www.github.com/andrewesweet/FullMonty/commit/f6b97e4e5f59847179bfa4c96d52215d6fea9d55))
+
 ### [2.0.7](https://www.github.com/andrewesweet/FullMonty/compare/v2.0.6...v2.0.7) (2021-06-29)
 
 

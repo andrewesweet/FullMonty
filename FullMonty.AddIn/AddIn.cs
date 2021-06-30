@@ -1,4 +1,5 @@
 ﻿using ExcelDna.Integration;
+using ExcelDna.IntelliSense;
 using ExcelDna.Registration;
 
 namespace FullMonty.AddIn
@@ -11,10 +12,13 @@ namespace FullMonty.AddIn
                 .GetExcelFunctions()
                 .ProcessParamsRegistrations()
                 .RegisterFunctions();
+
+            IntelliSenseServer.Install();
         }
 
         public void AutoClose()
         {
+            IntelliSenseServer.Uninstall();
         }
     }
 }

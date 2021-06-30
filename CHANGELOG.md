@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.1.1](https://www.github.com/andrewesweet/FullMonty/compare/v2.1.0...v2.1.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* Resolved "Could not find ExcelDna.Registration" error when loading the add-in ([eeeec06](https://www.github.com/andrewesweet/FullMonty/commit/eeeec06b34b16cab3c304740302deb1aee4635be))
+
 ## [2.1.0](https://www.github.com/andrewesweet/FullMonty/compare/v2.0.7...v2.1.0) (2021-06-29)
 
 
